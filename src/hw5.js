@@ -52,12 +52,17 @@ boundaryLines.position.y = 0.01;
 scene.add(boundaryLines);
 
 // Center circle
-const centerCircle = new THREE.Mesh(
-  new THREE.RingGeometry(2.35, 2.45, 32),
-  linesMaterial
+const curve = new THREE.EllipseCurve(
+  0, 0,                // Center x, y
+  2.4, 2.4,           // X radius, Y radius
+  0, Math.PI * 2,     // Start angle, end angle
+  false               // Clockwise
 );
-centerCircle.rotation.x = -Math.PI / 2;
-centerCircle.position.y = 0.01;
+
+const points = curve.getPoints(50);
+const points3D = points.map(point => new THREE.Vector3(point.x, 0.01, point.y));
+const centerCircleGeometry = new THREE.BufferGeometry().setFromPoints(points3D);
+const centerCircle = new THREE.Line(centerCircleGeometry, linesMaterial);
 scene.add(centerCircle);
 
 // Center line
@@ -71,28 +76,48 @@ scene.add(centerLine);
 
 // Three-point lines
 function createThreePointLine(side) {
+  // Adjust the angles based on which side we're creating
+  const startAngle = side === 1 ? Math.PI/2 : 3*Math.PI/2;
+  const endAngle = side === 1 ? 3*Math.PI/2 : 5*Math.PI/2;
+  
   const curve = new THREE.EllipseCurve(
-    side * 15, 0,             // Center x, y
+    0, 0,                     // Center x, y
     6.75, 6.75,               // X radius, Y radius
-    -Math.PI/3, Math.PI/3,    // Start angle, end angle
+    startAngle, endAngle,     // Start and end angles adjusted for each side
     false,                     // Clockwise?
     0                         // Rotation
   );
   
   const points = curve.getPoints(50);
-  const geometry = new THREE.BufferGeometry().setFromPoints(points);
+  // Convert 2D points to 3D points on the court surface
+  const points3D = points.map(point => {
+    if (side === 1) {
+      return new THREE.Vector3(point.x, 0.01, -point.y);
+    } else {
+      return new THREE.Vector3(point.x, 0.01, point.y);
+    }
+  });
+  
+  const geometry = new THREE.BufferGeometry().setFromPoints(points3D);
   const material = new THREE.LineBasicMaterial({ color: 0xFFFFFF });
   const threePointLine = new THREE.Line(geometry, material);
-  threePointLine.position.y = 0.01;
-  scene.add(threePointLine);
   
   // Add straight lines to complete three-point area
   const straightLineGeometry = new THREE.BufferGeometry().setFromPoints([
-    new THREE.Vector3(side * 15, 0.01, -7.5),
-    new THREE.Vector3(side * 15, 0.01, 7.5)
+    new THREE.Vector3(0, 0.01, -7.5),
+    new THREE.Vector3(0, 0.01, 7.5)
   ]);
   const straightLine = new THREE.Line(straightLineGeometry, material);
-  scene.add(straightLine);
+  
+  // Create a group and add both lines
+  const threePointGroup = new THREE.Group();
+  threePointGroup.add(threePointLine);
+  threePointGroup.add(straightLine);
+  
+  // Position the entire group
+  threePointGroup.position.x = side * 15;
+  
+  scene.add(threePointGroup);
 }
 
 // Create three-point lines for both sides
