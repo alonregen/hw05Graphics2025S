@@ -175,7 +175,7 @@ function createBasketballHoop(side) {
   const hoopGroup = new THREE.Group();
   
   // Constants
-  const RIM_HEIGHT = 10;  // 10 feet high
+  const RIM_HEIGHT = 6;  // Reduced from 10 to 6 units
   const BACKBOARD_HEIGHT = RIM_HEIGHT + 0.5;
   
   // Backboard
@@ -219,21 +219,21 @@ function createBasketballHoop(side) {
   // Support structure
   const poleMaterial = new THREE.MeshPhongMaterial({ color: 0x444444 });
   
-  // Main pole - moved further back
+  // Main pole - positioned closer to backboard
   const poleGeometry = new THREE.CylinderGeometry(0.1, 0.1, BACKBOARD_HEIGHT * 1.2, 8);
   const pole = new THREE.Mesh(poleGeometry, poleMaterial);
-  pole.position.set(2, BACKBOARD_HEIGHT * 0.6, 0); // Moved from 1.2 to 2 units back
+  pole.position.set(0, BACKBOARD_HEIGHT * 0.6, 1); // Moved closer to backboard (z from 2 to 1)
   hoopGroup.add(pole);
   
-  // Support arms - adjusted for new pole position
-  const armGeometry = new THREE.BoxGeometry(2, 0.1, 0.1); // Lengthened from 1.2 to 2
+  // Support arms - adjusted for closer pole position
+  const armGeometry = new THREE.BoxGeometry(0.1, 0.1, 1); // Shortened support arms
   const arm1 = new THREE.Mesh(armGeometry, poleMaterial);
-  arm1.position.set(1, BACKBOARD_HEIGHT, 0); // Adjusted x position
+  arm1.position.set(0, BACKBOARD_HEIGHT, 0.5);
   hoopGroup.add(arm1);
   
-  const arm2 = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.1, 0.1), poleMaterial); // Lengthened diagonal support
-  arm2.position.set(1, BACKBOARD_HEIGHT - 0.5, 0);
-  arm2.rotation.z = Math.PI / 6;
+  const arm2 = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 1.2), poleMaterial); // Shortened diagonal support
+  arm2.position.set(0, BACKBOARD_HEIGHT - 0.5, 0.5);
+  arm2.rotation.x = -Math.PI / 6; // Angled support
   hoopGroup.add(arm2);
   
   // Position and rotate the entire hoop
