@@ -203,8 +203,8 @@ function createBasketballHoop(side) {
   const RIM_HEIGHT = 6;  // Reduced from 10 to 6 units
   const BACKBOARD_HEIGHT = RIM_HEIGHT + 0.5;
   
-  // Backboard
-  const backboardGeometry = new THREE.BoxGeometry(1.8, 1.05, 0.05);
+  // Backboard - increased size slightly
+  const backboardGeometry = new THREE.BoxGeometry(2.2, 1.3, 0.05);
   const backboardMaterial = new THREE.MeshPhongMaterial({
     color: 0xffffff,
     transparent: true,
@@ -215,15 +215,15 @@ function createBasketballHoop(side) {
   backboard.position.set(0, BACKBOARD_HEIGHT, 0);
   hoopGroup.add(backboard);
   
-  // Rim
+  // Rim - centered on backboard and in front
   const rimGeometry = new THREE.TorusGeometry(0.45, 0.02, 16, 32);
   const rimMaterial = new THREE.MeshPhongMaterial({ color: 0xff8c00 });
   const rim = new THREE.Mesh(rimGeometry, rimMaterial);
   rim.rotation.x = Math.PI / 2;
-  rim.position.set(-0.45, RIM_HEIGHT, 0);
+  rim.position.set(0, RIM_HEIGHT, -0.45); // Moved to front of backboard
   hoopGroup.add(rim);
   
-  // Net (using line segments)
+  // Net (using line segments) - adjusted for centered rim in front
   const netMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
   const netSegments = 12;
   const netLength = 0.5;
@@ -234,8 +234,8 @@ function createBasketballHoop(side) {
     const z = Math.sin(angle) * 0.45;
     
     const netGeometry = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(x - 0.45, RIM_HEIGHT, z),
-      new THREE.Vector3(x * 0.3 - 0.45, RIM_HEIGHT - netLength, z * 0.3)
+      new THREE.Vector3(x, RIM_HEIGHT, z - 0.45),
+      new THREE.Vector3(x * 0.3, RIM_HEIGHT - netLength, z * 0.3 - 0.45)
     ]);
     const netLine = new THREE.Line(netGeometry, netMaterial);
     hoopGroup.add(netLine);
