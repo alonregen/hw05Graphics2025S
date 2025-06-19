@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Basketball Court - HW5</title>
+		<style>
+			body { 
+				margin: 0; 
+				font-family: Arial, sans-serif;
+				overflow: hidden;
+				background-color: #000;
+			}
+			
+			/* Enhanced UI styling */
+			.ui-container {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+				z-index: 1000;
+			}
+			
+			.side-container {
+				position: fixed;
+				background-color: rgba(0, 0, 0, 0.7);
+				color: white;
+				padding: 20px;
+				border-radius: 10px;
+				backdrop-filter: blur(5px);
+				pointer-events: auto;
+			}
+			
+			.side-container.left {
+				left: 20px;
+				top: 50%;
+				transform: translateY(-50%);
+				max-width: 250px;
+			}
+			
+			.side-container.right {
+				right: 20px;
+				top: 50%;
+				transform: translateY(-50%);
+				max-width: 250px;
+			}
+			
+			.controls-title {
+				color: #ff8c00;
+				font-size: 24px;
+				margin-bottom: 15px;
+				border-bottom: 2px solid #ff8c00;
+				padding-bottom: 5px;
+			}
+			
+			.control-item {
+				margin: 10px 0;
+				font-size: 16px;
+			}
+			
+			.key {
+				background-color: #ff8c00;
+				color: black;
+				padding: 2px 8px;
+				border-radius: 4px;
+				margin-right: 8px;
+				font-weight: bold;
+			}
+			
+			.future-controls {
+				margin-top: 20px;
+				padding-top: 10px;
+				border-top: 1px solid rgba(255, 255, 255, 0.2);
+				color: #888;
+				font-style: italic;
+			}
+			
+			.score-display {
+				font-size: 24px;
+				font-weight: bold;
+				margin-bottom: 15px;
+				text-align: center;
+				color: #ff8c00;
+			}
+			
+			.time-display {
+				font-size: 18px;
+				color: #fff;
+				margin-bottom: 20px;
+			}
+			
+			.key-highlight {
+				color: #ff8c00;
+				font-weight: bold;
+				font-size: 18px;
+				padding: 2px 6px;
+				background: rgba(255, 140, 0, 0.1);
+				border-radius: 4px;
+				margin-right: 5px;
+			}
+			
+			.future-control {
+				color: #999;
+				font-style: italic;
+				padding-left: 20px;
+				position: relative;
+				opacity: 0.8;
+			}
+			
+			.future-control::before {
+				content: "→";
+				position: absolute;
+				left: 0;
+				color: #ff8c00;
+				opacity: 0.6;
+			}
+			
+			.status-item {
+				margin: 12px 0;
+				padding: 8px;
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 6px;
+			}
+			
+			.status-label {
+				color: #ff8c00;
+				font-weight: bold;
+				margin-right: 8px;
+			}
+		</style>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'></script>
+	</head>
+	<body>
+		<div class="ui-container">
+			<div class="side-container left">
+				<div class="controls-title">Controls</div>
+				<div class="control-item">
+					<span class="key">O</span>Toggle orbit camera
+				</div>
+				<div class="control-item">
+					<span class="key">1</span>Default view
+				</div>
+				<div class="control-item">
+					<span class="key">2</span>Side view
+				</div>
+				<div class="control-item">
+					<span class="key">3</span>Corner view
+				</div>
+				<div class="control-item">
+					<span class="key">4</span>Close hoop view
+				</div>
+				<div class="future-controls">
+					<div class="controls-title">Coming in HW06</div>
+					<div class="control-item">↑↓←→ Move basketball</div>
+					<div class="control-item">W/S Adjust height</div>
+					<div class="control-item">Space Shoot ball</div>
+					<div class="control-item">R Reset ball</div>
+				</div>
+			</div>
+			
+			<div class="side-container right">
+				<div class="controls-title">Game Status</div>
+				<div class="score-display">Score: 0 - 0</div>
+				<div class="time-display" id="time-display">Time: 00:00</div>
+				<div class="status-item" id="game-status">
+					<span class="status-label">Game:</span>Ready
+				</div>
+				<div class="status-item" id="ball-position">
+					<span class="status-label">Ball:</span>Center Court
+				</div>
+				<div class="status-item" id="camera-status">
+					<span class="status-label">Camera:</span>Orbit Enabled
+				</div>
+			</div>
+		</div>
+		
+		<script src="src/hw5.js" type="module"></script>
+	</body>
+</html>
