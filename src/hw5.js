@@ -133,7 +133,7 @@ createKeyArea(1);
 
 // Basketball creation
 function createBasketball() {
-  const BALL_RADIUS = 0.12;
+  const BALL_RADIUS = 0.2;
   const ballGeometry = new THREE.SphereGeometry(BALL_RADIUS, 32, 32);
   const ballMaterial = new THREE.MeshPhongMaterial({
     color: 0xD85C17,
